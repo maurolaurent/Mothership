@@ -1,0 +1,434 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MothershipModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Mothership.dbo.Audit' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Audit">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="EventTime" />
+            <PropertyRef Name="Message" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EventTime" Type="datetime" Nullable="false" />
+          <Property Name="Message" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Details" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Client_Comm">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="Client" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Type" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Client_Comm_Line">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="CommId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Line" Type="int" Nullable="false" />
+          <Property Name="Text" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Client_Info">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="ClientId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="InfoType" Type="int" Nullable="false" />
+          <Property Name="InfoDetail" Type="nvarchar" MaxLength="2000" Nullable="false" />
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="PreferredConnection" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Command">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Command" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Type" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Job">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Created" Type="datetime" Nullable="false" />
+          <Property Name="ToExecute" Type="datetime" Nullable="false" />
+          <Property Name="Executed" Type="datetime" />
+          <Property Name="Client" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Command" Type="varchar" MaxLength="5000" Nullable="false" />
+          <Property Name="Response" Type="text" />
+          <Property Name="Status" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Client_Comm_Client">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="Client_Comm" Type="Self.Client_Comm" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Client_Comm">
+              <PropertyRef Name="Client" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Client_Comm_Line_Client_Comm">
+          <End Role="Client_Comm" Type="Self.Client_Comm" Multiplicity="1" />
+          <End Role="Client_Comm_Line" Type="Self.Client_Comm_Line" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client_Comm">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Client_Comm_Line">
+              <PropertyRef Name="CommId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Client_Info_Client">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="Client_Info" Type="Self.Client_Info" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Client_Info">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Job_Client">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="Job" Type="Self.Job" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Job">
+              <PropertyRef Name="Client" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MothershipModelStoreContainer">
+          <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Client_Comm" EntityType="Self.Client_Comm" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Client_Comm_Line" EntityType="Self.Client_Comm_Line" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Client_Info" EntityType="Self.Client_Info" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Command" EntityType="Self.Command" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Job" EntityType="Self.Job" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Audit" EntityType="Self.Audit" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Audit].[Id] AS [Id], 
+    [Audit].[EventTime] AS [EventTime], 
+    [Audit].[Message] AS [Message], 
+    [Audit].[Details] AS [Details]
+    FROM [dbo].[Audit] AS [Audit]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Client_Comm_Client" Association="Self.FK_Client_Comm_Client">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Client_Comm" EntitySet="Client_Comm" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Client_Comm_Line_Client_Comm" Association="Self.FK_Client_Comm_Line_Client_Comm">
+            <End Role="Client_Comm" EntitySet="Client_Comm" />
+            <End Role="Client_Comm_Line" EntitySet="Client_Comm_Line" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Client_Info_Client" Association="Self.FK_Client_Info_Client">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Client_Info" EntitySet="Client_Info" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Job_Client" Association="Self.FK_Job_Client">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Job" EntitySet="Job" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MothershipModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Client_Comm" Relationship="MothershipModel.FK_Client_Comm_Client" FromRole="Client" ToRole="Client_Comm" />
+          <NavigationProperty Name="Client_Info" Relationship="MothershipModel.FK_Client_Info_Client" FromRole="Client" ToRole="Client_Info" />
+          <NavigationProperty Name="Client_Comm1" Relationship="MothershipModel.FK_Client_Comm_Client1" FromRole="Client" ToRole="Client_Comm" />
+          <NavigationProperty Name="Job" Relationship="MothershipModel.FK_Job_Client" FromRole="Client" ToRole="Job" />
+        </EntityType>
+        <EntityType Name="Command">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Command1" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="MothershipEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Client" EntityType="Self.Client" />
+          <EntitySet Name="Command" EntityType="Self.Command" />
+          <EntitySet Name="Audit" EntityType="MothershipModel.Audit" />
+          <EntitySet Name="Client_Comm" EntityType="MothershipModel.Client_Comm" />
+          <AssociationSet Name="FK_Client_Comm_Client" Association="MothershipModel.FK_Client_Comm_Client">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Client_Comm" EntitySet="Client_Comm" />
+          </AssociationSet>
+          <EntitySet Name="Client_Info" EntityType="MothershipModel.Client_Info" />
+          <AssociationSet Name="FK_Client_Info_Client" Association="MothershipModel.FK_Client_Info_Client">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Client_Info" EntitySet="Client_Info" />
+          </AssociationSet>
+          <EntitySet Name="Client_Comm_Line" EntityType="MothershipModel.Client_Comm_Line" />
+          <AssociationSet Name="FK_Client_Comm_Line_Client_Comm" Association="MothershipModel.FK_Client_Comm_Line_Client_Comm">
+            <End Role="Client_Comm" EntitySet="Client_Comm" />
+            <End Role="Client_Comm_Line" EntitySet="Client_Comm_Line" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Client_Comm_Client1" Association="MothershipModel.FK_Client_Comm_Client1">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Client_Comm" EntitySet="Client_Comm" />
+          </AssociationSet>
+          <EntitySet Name="Job" EntityType="MothershipModel.Job" />
+          <AssociationSet Name="FK_Job_Client" Association="MothershipModel.FK_Job_Client">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Job" EntitySet="Job" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Audit">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="EventTime" />
+            <PropertyRef Name="Message" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="EventTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Message" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Details" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Client_Comm">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Client" Type="Guid" Nullable="false" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Client1" Relationship="MothershipModel.FK_Client_Comm_Client" FromRole="Client_Comm" ToRole="Client" />
+          <NavigationProperty Name="Client_Comm_Line" Relationship="MothershipModel.FK_Client_Comm_Line_Client_Comm" FromRole="Client_Comm" ToRole="Client_Comm_Line" />
+          <NavigationProperty Name="Client11" Relationship="MothershipModel.FK_Client_Comm_Client1" FromRole="Client_Comm" ToRole="Client" />
+        </EntityType>
+        <Association Name="FK_Client_Comm_Client">
+          <End Type="MothershipModel.Client" Role="Client" Multiplicity="1" />
+          <End Type="MothershipModel.Client_Comm" Role="Client_Comm" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Client_Comm">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Client_Info">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="ClientId" Type="Guid" Nullable="false" />
+          <Property Name="InfoType" Type="Int32" Nullable="false" />
+          <Property Name="InfoDetail" Type="String" Nullable="false" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="Client" Relationship="MothershipModel.FK_Client_Info_Client" FromRole="Client_Info" ToRole="Client" />
+          <Property Name="PreferredConnection" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Client_Info_Client">
+          <End Type="MothershipModel.Client" Role="Client" Multiplicity="1" />
+          <End Type="MothershipModel.Client_Info" Role="Client_Info" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Client_Info">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Client_Comm_Line">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="CommId" Type="Guid" Nullable="false" />
+          <Property Name="Line" Type="Int32" Nullable="false" />
+          <Property Name="Text" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="Client_Comm" Relationship="MothershipModel.FK_Client_Comm_Line_Client_Comm" FromRole="Client_Comm_Line" ToRole="Client_Comm" />
+        </EntityType>
+        <Association Name="FK_Client_Comm_Line_Client_Comm">
+          <End Type="MothershipModel.Client_Comm" Role="Client_Comm" Multiplicity="1" />
+          <End Type="MothershipModel.Client_Comm_Line" Role="Client_Comm_Line" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client_Comm">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Client_Comm_Line">
+              <PropertyRef Name="CommId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Client_Comm_Client1">
+          <End Type="MothershipModel.Client" Role="Client" Multiplicity="1" />
+          <End Type="MothershipModel.Client_Comm" Role="Client_Comm" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Client_Comm">
+              <PropertyRef Name="Client" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Job">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Created" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ToExecute" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Executed" Type="DateTime" Precision="3" />
+          <Property Name="Client" Type="Guid" Nullable="false" />
+          <Property Name="Command" Type="String" Nullable="false" MaxLength="5000" FixedLength="false" Unicode="false" />
+          <Property Name="Response" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Client1" Relationship="MothershipModel.FK_Job_Client" FromRole="Job" ToRole="Client" />
+        </EntityType>
+        <Association Name="FK_Job_Client">
+          <End Type="MothershipModel.Client" Role="Client" Multiplicity="1" />
+          <End Type="MothershipModel.Job" Role="Job" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Job">
+              <PropertyRef Name="Client" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MothershipModelStoreContainer" CdmEntityContainer="MothershipEntities">
+          <EntitySetMapping Name="Client">
+            <EntityTypeMapping TypeName="MothershipModel.Client">
+              <MappingFragment StoreEntitySet="Client">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Command">
+            <EntityTypeMapping TypeName="MothershipModel.Command">
+              <MappingFragment StoreEntitySet="Command">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Command1" ColumnName="Command" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Audit">
+            <EntityTypeMapping TypeName="MothershipModel.Audit">
+              <MappingFragment StoreEntitySet="Audit">
+                <ScalarProperty Name="Details" ColumnName="Details" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="EventTime" ColumnName="EventTime" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Client_Comm">
+            <EntityTypeMapping TypeName="MothershipModel.Client_Comm">
+              <MappingFragment StoreEntitySet="Client_Comm">
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Client" ColumnName="Client" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Client_Info">
+            <EntityTypeMapping TypeName="MothershipModel.Client_Info">
+              <MappingFragment StoreEntitySet="Client_Info">
+                <ScalarProperty Name="PreferredConnection" ColumnName="PreferredConnection" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="InfoDetail" ColumnName="InfoDetail" />
+                <ScalarProperty Name="InfoType" ColumnName="InfoType" />
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Client_Comm_Line">
+            <EntityTypeMapping TypeName="MothershipModel.Client_Comm_Line">
+              <MappingFragment StoreEntitySet="Client_Comm_Line">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="Line" ColumnName="Line" />
+                <ScalarProperty Name="CommId" ColumnName="CommId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Job">
+            <EntityTypeMapping TypeName="MothershipModel.Job">
+              <MappingFragment StoreEntitySet="Job">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Response" ColumnName="Response" />
+                <ScalarProperty Name="Command" ColumnName="Command" />
+                <ScalarProperty Name="Client" ColumnName="Client" />
+                <ScalarProperty Name="Executed" ColumnName="Executed" />
+                <ScalarProperty Name="ToExecute" ColumnName="ToExecute" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

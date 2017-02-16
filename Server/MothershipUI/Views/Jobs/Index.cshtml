@@ -1,0 +1,99 @@
+﻿@model IEnumerable<MothershipLibrary.Job>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+
+
+
+
+@if (Model.Count() == 0)
+{
+    <div class="row">
+        <div class="col-xs-12 alert alert-dismissable">
+            No jobs have been ran for this minion
+        </div>
+    </div>
+}
+else
+{
+    
+
+    int count = 0;
+    foreach (var item in Model)
+    {
+
+        int status = item.Status;
+        string cl_status = string.Empty;
+        switch (status)
+        {
+            case 0: //Waiting
+                cl_status = "alert-info";
+                break;
+            case 1: //Ran
+                cl_status = "alert-success";
+                break;
+            case 2: //Error
+                cl_status = "alert-danger";
+                break;
+            default:
+                break;
+        }
+
+
+        <div class="col-xs-12 alert @cl_status" style="font-size:.9em;">
+            
+            <div class="col-xs-4 text-center">
+               @item.Name
+            </div>
+            <div class="col-xs-6">
+                <small><i> Created: @item.Created</i></small>
+                <br />
+                @switch (item.Status)
+                {
+                    case 0:
+                        <i><small>Be executed: @item.ToExecute</small></i>
+                        break;
+                    case 1:
+                    <i><small>Executed: @item.Executed</small></i>
+                        break;
+                    case 2:
+                    <i><small>Executed: @item.Executed</small></i>
+                        break;
+                    default:
+                        break;
+                }            
+            </div>
+
+            <div class="col-xs-2">
+
+                <button type="button" class="btn-sm btn-default" data-toggle="collapse" data-target=".collap_@count">Response</button>
+
+            </div>
+            <br class="clearfix" />
+            
+
+            <div class="col-xs-12" style="margin-top:.5em;">
+                <div id="responseCollapse" class="collapse collap_@count">
+                    <textarea disabled="disabled" class="form-control" rows="8" style="width:100%; font-family: monospace; color:#00ff21; background-color:#000000; ">@item.Response;</textarea>
+                   
+                </div>
+            </div>
+            </div>
+        count++;
+    }
+       
+    
+}
+
+</body>
+</html>

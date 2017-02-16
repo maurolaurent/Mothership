@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="f9096471-35bc-4994-b1bf-67292abef458" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="net.tcp://localhost:8525/ReceiveCommService/mex" Protocol="mex" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="0cd74f50-2b06-46ee-9bf2-7ccec8e2675d" SourceId="1" SourceUrl="net.tcp://localhost:8525/ReceiveCommService/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="41258a58-c809-42f4-baad-f337d6168c64" SourceId="1" SourceUrl="net.tcp://localhost:8525/ReceiveCommService/mex" />
+    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="160e3290-a4ba-4ab3-9648-2ab514cf1b21" SourceId="1" SourceUrl="net.tcp://localhost:8525/ReceiveCommService/mex" />
+    <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="b2303770-ca1e-4ab4-9002-6fb21f01da57" SourceId="1" SourceUrl="net.tcp://localhost:8525/ReceiveCommService/mex" />
+    <MetadataFile FileName="MothershipService.xsd" MetadataType="Schema" ID="b17f58d0-7585-4c7a-b9e1-daeee06eef7d" SourceId="1" SourceUrl="net.tcp://localhost:8525/ReceiveCommService/mex" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

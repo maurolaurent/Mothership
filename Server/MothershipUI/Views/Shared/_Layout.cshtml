@@ -1,0 +1,189 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Mothership - Remote Control Shell - By Mauro Laurent</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <img src="~/Content/ripple.gif" id="loader" style="position:absolute; left:2%; top:40%;" z-index="99999" onload="javascript: $('#loader').hide();">
+    <div class="modal fade" id="minionModal" tabindex="-1" role="dialog" aria-labelledby="minionModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-xs-12">
+
+                            <div id="sec_MinionViewholder">
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div id="sec_minionAlert">
+                    <div class="alert">
+                        <strong></strong><span></span>
+                    </div>
+                </div>
+                <hr />
+                <div style="padding:1em;">
+                    <h4 class="text-center">Jobs for this minion</h4>
+
+                    
+
+                    <div id="sec_cliJobs" style="overflow-y:auto; height:300px;"></div>
+                </div>
+               
+                <div class="modal-footer">
+                    <button type="button" class="btn-xs btn-default" data-dismiss="modal">Close window</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="accountModal" tabindex="-1" role="dialog" aria-labelledby="accountModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group error-messages" data-bind="foreach: errors">
+                            <span class="alert alert-danger alert-dismissable" data-bind="text: $data" />
+                        </div>
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <div class="col-sm-5">
+                                <form data-bind="submit: register">
+                                    <h3>Register</h3>
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <input class="form-control" type="text" data-bind="value: registerEmail" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Password</label>
+                                        <input class="form-control" type="password" data-bind="value: registerPassword" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Confirm Password</label>
+                                        <input class="form-control" type="password" data-bind="value: registerPassword2" />
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-default">Register</button>
+                                    </div>
+                                </form>
+                            </div>
+    <div class="col-sm-4">
+        <p style="margin-top:12em;">
+            <small>
+                <i>
+                    Use this form to add additional users into the user database
+                </i>
+            </small>
+        </p>
+
+    </div>
+                        }
+                        @if (!User.Identity.IsAuthenticated) { 
+                        <div class="col-sm-5 col-sm-offset-1">
+                            <h3>Log In</h3>
+                            <form data-bind="submit: login">
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input class="form-control" type="text" data-bind="value: loginEmail" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Password</label>
+                                    <input class="form-control" type="password" data-bind="value: loginPassword" />
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-default">Log In</button>
+                                </div>
+                            </form>
+                        </div>
+                        
+        }
+        @if (User.Identity.IsAuthenticated)
+                        {
+            <div class="col-sm-12 text-right">
+
+                <form>
+                    <div class="form-group">
+                        <button data-bind="click: logout" class="btn btn-warning">Log Out</button>
+                    </div>
+                </form>
+            </div>
+                        }
+    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button><span style="font-size: 2em; letter-spacing:.2em; color:#0c7bb4; padding-top:.15em; display:block;">
+                    MOTHERSHIP <small style="color:#808080; letter-spacing:0; font-size:.5em; margin-top:-.25em;">Remote Control Shell</small>
+                </span>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav pull-right">                   
+                    <li><a href="#" data-toggle="modal" data-target="#accountModal">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <span>Hi there, @User.Identity.Name</span>
+                        }
+                        else
+                        {
+                            <span>Login</span>
+                        }
+                        </a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content" style="margin-top:6em;">
+
+
+        @if (!Request.LogonUserIdentity.IsAuthenticated)
+        {
+            <h1>Please login to the system</h1>
+            RenderBody();
+        }
+        else
+        {
+            @RenderBody()
+        }
+
+
+
+
+
+        <hr />
+        <footer>
+            <p>&copy; Mauro Laurent, @DateTime.Now.Year - MOTHERSHIP <small>Remote Control Shell</small></p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/ko")
+    @Scripts.Render("~/bundles/datetimepicker")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/viewmodels")
+    @Scripts.Render("~/bundles/mothership")
+
+    @RenderSection("scripts", required: false)
+    <script>
+        var rootPath = '@Url.Content("~/")';
+    </script>
+
+</body>
+</html>

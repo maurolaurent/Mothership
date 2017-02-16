@@ -1,0 +1,38 @@
+﻿@model IEnumerable<MothershipLibrary.Client>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+
+    <div class="row">
+
+        @foreach (var item in Model)
+        {
+
+            <div class="col-xs-3 panel panel-default" style="text-align:center;" id="c_@item.Name.ToLower().Trim()">
+                <div class="panel-body">
+                    <h4>@Html.DisplayFor(modelItem => item.Name)</h4>
+                    <div class="status"></div>
+                </div>
+                <div class="panel-footer">
+                    <span class="btn btn-primary" data-toggle="modal" data-target="#minionModal" onclick="ShowMinionDetail('@item.Id')">Command Console</span>
+                    <script>
+                        CheckIfMinionOnline("@item.Id", "c_@item.Name.ToLower().Trim()");
+                    </script>
+                </div>
+            </div>
+            
+        }
+
+    </div>  
+</body>
+</html>

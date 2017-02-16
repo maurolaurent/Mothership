@@ -131,4 +131,4 @@ Version history:
 [Minion] 0.5 beta.
 [Mothership Service] 0.5 beta.
 [Mothership Library] 0.1 alpha.
-[Methership Admin] RC1.
+[Mothership Admin] RC1.
